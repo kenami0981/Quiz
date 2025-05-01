@@ -11,19 +11,22 @@ namespace Quiz.ViewModel
 {
     class MainViewModel : BaseViewModel
     {
-        private BaseViewModel _selectedViewModel = new CreatorViewModel();
-        public BaseViewModel SelectedViewModel { 
+        private BaseViewModel _selectedViewModel;
+
+        public BaseViewModel SelectedViewModel
+        {
             get { return _selectedViewModel; }
-            set { 
-                _selectedViewModel = value; 
+            set
+            {
+                _selectedViewModel = value;
                 OnPropertyChanged(nameof(SelectedViewModel));
             }
         }
 
-        public ICommand UpdateViewCommand { get; set; }
-
-        public MainViewModel() {
-            UpdateViewCommand = new UpdateViewCommand(this);
+        public MainViewModel()
+        {
+            // Inicjalizacja domyślnego widoku - MenuViewModel
+            SelectedViewModel = new MenuViewModel(this);  // Przekazywanie MainViewModel
         }
     }
 }

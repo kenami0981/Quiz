@@ -21,7 +21,7 @@ namespace Quiz
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainViewModel();
+            //DataContext = new MenuViewModel();
         }
     }
 }
