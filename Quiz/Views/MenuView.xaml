@@ -1,0 +1,11 @@
+﻿<UserControl x:Class="Quiz.Views.MenuView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Quiz.ViewModel">
+    <Grid>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button Content="Stwórz quiz" Command="{Binding UpdateViewCommand}" CommandParameter="create"/>
+            <Button Content="Rozwiąż quiz" Command="{Binding UpdateViewCommand}" CommandParameter="solve"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
