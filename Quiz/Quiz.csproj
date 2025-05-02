@@ -55,7 +55,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\AddQuestionCommand.cs" />
     <Compile Include="Commands\UpdateViewCommand.cs" />
+    <Compile Include="Model\Question.cs" />
     <Compile Include="ViewModel\MenuViewModel.cs" />
     <Compile Include="Views\CreatorView.xaml.cs">
       <DependentUpon>CreatorView.xaml</DependentUpon>
@@ -121,8 +123,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

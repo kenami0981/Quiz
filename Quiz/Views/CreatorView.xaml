@@ -18,22 +18,24 @@
         <Label Content="Kreator"/>
         <StackPanel Grid.Row="1" Grid.Column="0">
             <Label Content="Nazwa pytania"></Label>
-            <TextBox></TextBox>
+            <TextBox Text="{Binding QuestionTitle, Mode=TwoWay}"></TextBox>
             <Label Content="Treść pytania"></Label>
-            <TextBox></TextBox>
+            <TextBox Text="{Binding QuestionText, Mode=TwoWay}"></TextBox>
             <Label Content="Odpowiedź 1"></Label>
-            <TextBox></TextBox>
-            <CheckBox></CheckBox>
+            <TextBox Text="{Binding Answer1, Mode=TwoWay}"></TextBox>
+            <CheckBox IsChecked="{Binding IsAnswer1Correct, Mode=TwoWay}"></CheckBox>
             <Label Content="Odpowiedź 2"></Label>
-            <TextBox></TextBox>
-            <CheckBox></CheckBox>
+            <TextBox Text="{Binding Answer2, Mode=TwoWay}"></TextBox>
+            <CheckBox IsChecked="{Binding IsAnswer2Correct, Mode=TwoWay}"></CheckBox>
             <Label Content="Odpowiedź 3"></Label>
-            <TextBox></TextBox>
-            <CheckBox></CheckBox>
+            <TextBox Text="{Binding Answer3, Mode=TwoWay}"></TextBox>
+            <CheckBox IsChecked="{Binding IsAnswer3Correct, Mode=TwoWay}"></CheckBox>
             <Label Content="Odpowiedź 4"></Label>
-            <TextBox></TextBox>
-            <CheckBox></CheckBox>
+            <TextBox Text="{Binding Answer4, Mode=TwoWay}"></TextBox>
+            <CheckBox IsChecked="{Binding IsAnswer4Correct, Mode=TwoWay}"></CheckBox>
+            <Button Content="Dodaj" Command="{Binding AddQuestionCommand}"></Button>
         </StackPanel>
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding QuestionTitle, Mode=OneWay}"></TextBlock>
         
     </Grid>
 </UserControl>
