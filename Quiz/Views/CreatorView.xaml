@@ -6,7 +6,34 @@
              xmlns:local="clr-namespace:Quiz.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Label Content="create"/>
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="11*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Label Content="Kreator"/>
+        <StackPanel Grid.Row="1" Grid.Column="0">
+            <Label Content="Nazwa pytania"></Label>
+            <TextBox></TextBox>
+            <Label Content="Treść pytania"></Label>
+            <TextBox></TextBox>
+            <Label Content="Odpowiedź 1"></Label>
+            <TextBox></TextBox>
+            <CheckBox></CheckBox>
+            <Label Content="Odpowiedź 2"></Label>
+            <TextBox></TextBox>
+            <CheckBox></CheckBox>
+            <Label Content="Odpowiedź 3"></Label>
+            <TextBox></TextBox>
+            <CheckBox></CheckBox>
+            <Label Content="Odpowiedź 4"></Label>
+            <TextBox></TextBox>
+            <CheckBox></CheckBox>
+        </StackPanel>
+        
     </Grid>
 </UserControl>

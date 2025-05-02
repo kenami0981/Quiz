@@ -15,13 +15,5 @@
     <Grid>
         <!-- Dynamiczna część oparta na ViewModelu -->
         <ContentControl Content="{Binding SelectedViewModel}" />
-
-        <!-- Menu -->
-        <!--<Grid x:Name="Menu">
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Button Content="Stwórz quiz" Command="{Binding UpdateViewCommand}" CommandParameter="create"/>
-                <Button Content="Rozwiąż quiz" Command="{Binding UpdateViewCommand}" CommandParameter="solve"/>
-            </StackPanel>
-        </Grid>-->
     </Grid>
 </Window>

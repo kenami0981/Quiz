@@ -24,7 +24,6 @@ namespace Quiz.Commands
 
         public void Execute(object parameter)
         {
-            Console.WriteLine("djoadj");
             if (parameter.ToString() == "create"){
                 viewModel.SelectedViewModel = new CreatorViewModel();
             }
