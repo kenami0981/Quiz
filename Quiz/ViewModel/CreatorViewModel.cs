@@ -11,22 +11,25 @@ namespace Quiz.ViewModel
 {
     internal class CreatorViewModel : BaseViewModel
     {
-        
-        public ICommand AddQuestionCommand { get; }
 
-        public CreatorViewModel()
-        {
-            AddQuestionCommand = new AddQuestionCommand(this);
-        }
+        //public ICommand AddQuestionCommand { get; }
+
+        //public CreatorViewModel()
+        //{
+        //    AddQuestionCommand = new RelayCommand(this);
+        //}
         private string _questionTitle;
-        public string QuestionTitle {
+        public string QuestionTitle
+        {
             get
             {
                 return _questionTitle;
             }
-            set { 
+            set
+            {
                 _questionTitle = value;
                 OnPropertyChanged(nameof(QuestionTitle));
+                (AddQuestionCommand as RelayCommand)?.RaiseCanExecuteChanged();
             }
         }
         private string _questionText;
@@ -40,6 +43,7 @@ namespace Quiz.ViewModel
             {
                 _questionText = value;
                 OnPropertyChanged(nameof(QuestionText));
+                (AddQuestionCommand as RelayCommand)?.RaiseCanExecuteChanged();
             }
         }
         private string _answer1;
@@ -90,6 +94,7 @@ namespace Quiz.ViewModel
             {
                 _isAnswer1Correct = value;
                 OnPropertyChanged(nameof(IsAnswer1Correct));
+                (AddQuestionCommand as RelayCommand)?.RaiseCanExecuteChanged();
             }
         }
         private bool _isAnswer2Correct;
@@ -100,6 +105,7 @@ namespace Quiz.ViewModel
             {
                 _isAnswer2Correct = value;
                 OnPropertyChanged(nameof(IsAnswer2Correct));
+                (AddQuestionCommand as RelayCommand)?.RaiseCanExecuteChanged();
             }
         }
         private bool _isAnswer3Correct;
@@ -110,6 +116,7 @@ namespace Quiz.ViewModel
             {
                 _isAnswer3Correct = value;
                 OnPropertyChanged(nameof(IsAnswer3Correct));
+                (AddQuestionCommand as RelayCommand)?.RaiseCanExecuteChanged();
             }
         }
         private bool _isAnswer4Correct;
@@ -120,20 +127,56 @@ namespace Quiz.ViewModel
             {
                 _isAnswer4Correct = value;
                 OnPropertyChanged(nameof(IsAnswer4Correct));
+                (AddQuestionCommand as RelayCommand)?.RaiseCanExecuteChanged();
             }
         }
-        public void AddQuestion()
+        //public void AddQuestion()
+        //{
+        //string[] answers = { _answer1, _answer2, _answer3, _answer4 };
+        //bool[] correctAnswers = { _isAnswer1Correct, _isAnswer2Correct, _isAnswer3Correct, _isAnswer4Correct};
+        //    Question pyt= new Question(_questionTitle, _questionText, answers, correctAnswers);
+        //    Console.WriteLine(pyt.ToString());
+        //    // Logika dodawania pytania (możesz tu dodać później np. walidację i zapis)
+        //    Console.WriteLine("Pytanie zostało dodane!");
+        //}
+
+        private ICommand _addQuestionCommand;
+        public ICommand AddQuestionCommand
         {
-        string[] answers = { _answer1, _answer2, _answer3, _answer4 };
-        bool[] correctAnswers = { _isAnswer1Correct, _isAnswer2Correct, _isAnswer3Correct, _isAnswer4Correct};
-            Question pyt= new Question(_questionTitle, _questionText, answers, correctAnswers);
-            Console.WriteLine(pyt.ToString());
-            // Logika dodawania pytania (możesz tu dodać później np. walidację i zapis)
-            Console.WriteLine("Pytanie zostało dodane!");
+            get
+            {
+                if (_addQuestionCommand == null)
+                {
+                    _addQuestionCommand = new RelayCommand(
+                    (object o) =>
+                    {
+                        string[] answers = { _answer1, _answer2, _answer3, _answer4 };
+                        bool[] correctAnswers = { _isAnswer1Correct, _isAnswer2Correct, _isAnswer3Correct, _isAnswer4Correct };
+                        Question pyt = new Question(_questionTitle, _questionText, answers, correctAnswers);
+                        Console.WriteLine(pyt.ToString());
+                        OnPropertyChanged(nameof(_addQuestionCommand));
+                    },
+                    (object o) =>
+                    {
+                        return (_isAnswer1Correct==true || _isAnswer2Correct==true || _isAnswer3Correct == true || _isAnswer4Correct == true) &&
+                        !string.IsNullOrEmpty(_answer1) &&
+                        !string.IsNullOrEmpty(_answer2) &&
+                        !string.IsNullOrEmpty(_answer3) &&
+                        !string.IsNullOrEmpty(_answer4) &&
+                        !string.IsNullOrWhiteSpace(_questionTitle) && 
+                        !string.IsNullOrWhiteSpace(_questionText);
+                    });
+                }
+
+                    return _addQuestionCommand;
+
+                }
+
+            }
+
+
+
+
         }
-
-
-
     }
-}
 

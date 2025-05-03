@@ -23,10 +23,7 @@ namespace Quiz.Model
             CorrectAnswers = correctAnswers;
         }
 
-        public Question()
-        {
-            
-        }
+        
         public override string ToString()
         {
             return $"{QuestionTitle}, {QuestionText}, {Answers}, {CorrectAnswers}";
