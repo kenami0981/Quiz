@@ -10,10 +10,10 @@ namespace Quiz.Model
 {
     internal class Question
     {
-        public string QuestionTitle;
-        public string QuestionText;
-        public string[] Answers;
-        public bool[] CorrectAnswers; 
+        public string QuestionTitle { get; set; }
+        public string QuestionText { get; set; }
+        public string[] Answers { get; set; }
+        public bool[] CorrectAnswers { get; set; }
 
         public Question(string questionTitle, string questionText, string[] answers, bool[] correctAnswers)
         {

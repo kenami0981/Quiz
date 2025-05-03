@@ -35,7 +35,25 @@
             <CheckBox IsChecked="{Binding IsAnswer4Correct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
             <Button Content="Dodaj" Command="{Binding AddQuestionCommand}"></Button>
         </StackPanel>
-        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding QuestionTitle, Mode=OneWay}"></TextBlock>
+        <!--<TextBlock  Text="{Binding QuestionTitle, Mode=OneWay}"></TextBlock>-->
         
+            <ListBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Questions}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="5">
+                            <TextBlock Text="{Binding QuestionTitle}" FontWeight="Bold" FontSize="14"/>
+                            <TextBlock Text="{Binding QuestionText}" FontSize="12"/>
+                            <!-- Przykładowe wyświetlenie odpowiedzi -->
+                            <ItemsControl ItemsSource="{Binding Answers}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" FontStyle="Italic" Margin="5,0,0,0"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
     </Grid>
 </UserControl>

@@ -2,6 +2,7 @@
 using Quiz.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ namespace Quiz.ViewModel
 {
     internal class CreatorViewModel : BaseViewModel
     {
+        public ObservableCollection<Question> Questions { get; } = new ObservableCollection<Question>();
 
         //public ICommand AddQuestionCommand { get; }
 
@@ -158,6 +160,7 @@ namespace Quiz.ViewModel
                         bool[] correctAnswers = { _isAnswer1Correct, _isAnswer2Correct, _isAnswer3Correct, _isAnswer4Correct };
                         Question pyt = new Question(_questionTitle, _questionText, answers, correctAnswers);
                         Console.WriteLine(pyt.ToString());
+                        Questions.Add(pyt);
                         OnPropertyChanged(nameof(_addQuestionCommand));
                     },
                     (object o) =>
