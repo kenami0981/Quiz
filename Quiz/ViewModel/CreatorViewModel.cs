@@ -54,6 +54,7 @@ namespace Quiz.ViewModel
             {
                 _answer1 = value;
                 OnPropertyChanged(nameof(Answer1));
+                (AddQuestionCommand as RelayCommand)?.RaiseCanExecuteChanged();
             }
         }
         private string _answer2;
@@ -64,6 +65,7 @@ namespace Quiz.ViewModel
             {
                 _answer2 = value;
                 OnPropertyChanged(nameof(Answer2));
+                (AddQuestionCommand as RelayCommand)?.RaiseCanExecuteChanged();
             }
         }
         private string _answer3;
@@ -74,6 +76,7 @@ namespace Quiz.ViewModel
             {
                 _answer3 = value;
                 OnPropertyChanged(nameof(Answer3));
+                (AddQuestionCommand as RelayCommand)?.RaiseCanExecuteChanged();
             }
         }
         private string _answer4;
@@ -84,6 +87,7 @@ namespace Quiz.ViewModel
             {
                 _answer4 = value;
                 OnPropertyChanged(nameof(Answer4));
+                (AddQuestionCommand as RelayCommand)?.RaiseCanExecuteChanged();
             }
         }
         private bool _isAnswer1Correct;
