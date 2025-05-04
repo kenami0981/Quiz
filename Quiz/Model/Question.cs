@@ -12,21 +12,19 @@ namespace Quiz.Model
     {
         public string QuestionTitle { get; set; }
         public string QuestionText { get; set; }
-        public string[] Answers { get; set; }
-        public bool[] CorrectAnswers { get; set; }
+        public List<Answer> Answers { get; set; }
 
-        public Question(string questionTitle, string questionText, string[] answers, bool[] correctAnswers)
+        public Question(string questionTitle, string questionText, List<Answer> answers)
         {
             QuestionTitle = questionTitle;
             QuestionText = questionText;
             Answers = answers;
-            CorrectAnswers = correctAnswers;
         }
 
         
         public override string ToString()
         {
-            return $"{QuestionTitle}, {QuestionText}, {Answers}, {CorrectAnswers}";
+            return $"{QuestionTitle}, {QuestionText}, {Answers}";
         }
     }
 }

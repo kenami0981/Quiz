@@ -6,7 +6,17 @@
              xmlns:local="clr-namespace:Quiz.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    
     <Grid Background="White">
+        <Grid Visibility="{Binding FirstElementVisibility}">
+            <StackPanel>
+            <Label Content="Tytuł quizu">
+            </Label>
+            <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <Button Content="Zatwierdź" Command="{Binding AddQuizTitleCommand}"></Button>
+            </StackPanel>
+        </Grid>
+        <Grid Visibility="{Binding SecondElementVisibility}">
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
             <RowDefinition Height="11*"></RowDefinition>
@@ -47,7 +57,7 @@
                             <ItemsControl ItemsSource="{Binding Answers}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding}" FontStyle="Italic" Margin="5,0,0,0"/>
+                                        <TextBlock Text="{Binding Text}" FontStyle="Italic" Margin="5,0,0,0"/>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
@@ -55,5 +65,6 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
+        </Grid>
     </Grid>
 </UserControl>
