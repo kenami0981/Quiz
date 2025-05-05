@@ -13,15 +13,23 @@ namespace Quiz.Model
         public string QuestionTitle { get; set; }
         public string QuestionText { get; set; }
         public List<Answer> Answers { get; set; }
+        public Answer SelectedAnswer { get; set; }
 
         public Question(string questionTitle, string questionText, List<Answer> answers)
         {
             QuestionTitle = questionTitle;
             QuestionText = questionText;
             Answers = answers;
+            SelectedAnswer = null;
+        }
+        public Question()
+        {
+            QuestionTitle = string.Empty;
+            QuestionText = string.Empty;
+            Answers = new List<Answer>();
+            SelectedAnswer = null;
         }
 
-        
         public override string ToString()
         {
             return $"{QuestionTitle}, {QuestionText}, {Answers}";

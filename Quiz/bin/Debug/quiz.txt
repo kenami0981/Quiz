@@ -1,0 +1,18 @@
+Nasz Quiz
+Jaka jest stolica Polski?
+Warszawa true
+Kraków false
+Gniezno false
+Lublin false
+
+Kiedy odbyła się pierwsza inauguracja roku akademickiego Politechniki Śląskiej w Gliwicach 
+1959 false
+1947 false
+1945 true
+1950 false
+
+Jaki jest kolor nieba?
+Niebieski true
+Czerwony false
+Zielony false
+Biały false
