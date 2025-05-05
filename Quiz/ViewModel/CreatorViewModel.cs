@@ -59,7 +59,6 @@ namespace Quiz.ViewModel
             {
                 _questionTitle = value;
                 OnPropertyChanged(nameof(QuestionTitle));
-                (AddQuestionCommand as RelayCommand)?.RaiseCanExecuteChanged();
             }
         }
         private string _questionText;
@@ -73,7 +72,6 @@ namespace Quiz.ViewModel
             {
                 _questionText = value;
                 OnPropertyChanged(nameof(QuestionText));
-                (AddQuestionCommand as RelayCommand)?.RaiseCanExecuteChanged();
             }
         }
         private string _answer1;
@@ -84,7 +82,6 @@ namespace Quiz.ViewModel
             {
                 _answer1 = value;
                 OnPropertyChanged(nameof(Answer1));
-                (AddQuestionCommand as RelayCommand)?.RaiseCanExecuteChanged();
             }
         }
         private string _answer2;
@@ -95,7 +92,6 @@ namespace Quiz.ViewModel
             {
                 _answer2 = value;
                 OnPropertyChanged(nameof(Answer2));
-                (AddQuestionCommand as RelayCommand)?.RaiseCanExecuteChanged();
             }
         }
         private string _answer3;
@@ -106,7 +102,6 @@ namespace Quiz.ViewModel
             {
                 _answer3 = value;
                 OnPropertyChanged(nameof(Answer3));
-                (AddQuestionCommand as RelayCommand)?.RaiseCanExecuteChanged();
             }
         }
         private string _answer4;
@@ -117,7 +112,6 @@ namespace Quiz.ViewModel
             {
                 _answer4 = value;
                 OnPropertyChanged(nameof(Answer4));
-                (AddQuestionCommand as RelayCommand)?.RaiseCanExecuteChanged();
             }
         }
         private bool _isAnswer1Correct;
@@ -128,7 +122,6 @@ namespace Quiz.ViewModel
             {
                 _isAnswer1Correct = value;
                 OnPropertyChanged(nameof(IsAnswer1Correct));
-                (AddQuestionCommand as RelayCommand)?.RaiseCanExecuteChanged();
             }
         }
         private bool _isAnswer2Correct;
@@ -139,7 +132,6 @@ namespace Quiz.ViewModel
             {
                 _isAnswer2Correct = value;
                 OnPropertyChanged(nameof(IsAnswer2Correct));
-                (AddQuestionCommand as RelayCommand)?.RaiseCanExecuteChanged();
             }
         }
         private bool _isAnswer3Correct;
@@ -150,7 +142,6 @@ namespace Quiz.ViewModel
             {
                 _isAnswer3Correct = value;
                 OnPropertyChanged(nameof(IsAnswer3Correct));
-                (AddQuestionCommand as RelayCommand)?.RaiseCanExecuteChanged();
             }
         }
         private bool _isAnswer4Correct;
@@ -161,7 +152,6 @@ namespace Quiz.ViewModel
             {
                 _isAnswer4Correct = value;
                 OnPropertyChanged(nameof(IsAnswer4Correct));
-                (AddQuestionCommand as RelayCommand)?.RaiseCanExecuteChanged();
             }
         }
         //public void AddQuestion()
