@@ -1,0 +1,15 @@
+Wyniki quizu: Nasz Quiz - 06.05.2025 23:25:20
+Twój wynik: Twój wynik: 0 na 3
+
+Pytanie: Jaka jest stolica Polski?
+Twoje odpowiedzi: Warszawa, Kraków, Gniezno, Lublin
+Poprawne odpowiedzi: Warszawa
+
+Pytanie: Kiedy odbyła się pierwsza inauguracja roku akademickiego Politechniki Śląskiej w Gliwicach
+Twoje odpowiedzi: 1950, 1945, 1947, 1959
+Poprawne odpowiedzi: 1945
+
+Pytanie: Jaki jest kolor nieba?
+Twoje odpowiedzi: Biały, Zielony, Czerwony, Niebieski
+Poprawne odpowiedzi: Niebieski
+
