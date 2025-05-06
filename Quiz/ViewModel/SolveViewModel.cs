@@ -6,6 +6,8 @@ using System.Linq;
 using System.Windows.Input;
 using System.Collections.Generic;
 using System;
+using System.Timers;
+
 
 
 namespace Quiz.ViewModel
@@ -17,6 +19,10 @@ namespace Quiz.ViewModel
         private int _currentQuestionIndex;
         private bool _isQuizFinished;
         private string _quizScore;
+        private int _timeLeft; 
+        private bool _isQuizStarted;
+        private Timer _timer;
+        private Dictionary<Question, List<Answer>> _selectedAnswers;
 
         public QuizName Quiz
         {
@@ -26,6 +32,7 @@ namespace Quiz.ViewModel
                 if (_quiz != value)
                 {
                     _quiz = value;
+                    OnPropertyChanged(nameof(Quiz));
 
                 }
             }
@@ -50,7 +57,7 @@ namespace Quiz.ViewModel
 
         public string ContentVisibility
         {
-            get => CurrentQuestion != null ? "Visible" : "Collapsed";
+            get => CurrentQuestion != null && _isQuizStarted ? "Visible" : "Collapsed";
         }
 
         public bool IsQuizFinished
@@ -64,6 +71,11 @@ namespace Quiz.ViewModel
                     OnPropertyChanged(nameof(IsQuizFinished));
                     OnPropertyChanged(nameof(ScoreVisibility));
                     OnPropertyChanged(nameof(ContentVisibility));
+                    if (_isQuizFinished && _timer != null)
+                    {
+                        _timer.Stop();
+                        OnPropertyChanged(nameof(TimeLeft));
+                    }
                 }
             }
         }
@@ -76,7 +88,7 @@ namespace Quiz.ViewModel
 
         public string QuizScore
         {
-            get => _quizScore;
+            get => _quizScore ?? string.Empty;
             set
             {
                 if (_quizScore != value)
@@ -88,10 +100,94 @@ namespace Quiz.ViewModel
             }
         }
 
+
+        public int TimeLeft
+        {
+            get => _timeLeft;
+            set
+            {
+                if (_timeLeft != value)
+                {
+                    _timeLeft = value;
+                    OnPropertyChanged(nameof(TimeLeft));
+                    if (_timeLeft <= 0 && _isQuizStarted && !IsQuizFinished)
+                    {
+                        FinishQuiz(null);
+                    }
+                }
+            }
+        }
+
+
+        public bool IsQuizStarted
+        {
+            get => _isQuizStarted;
+            set
+            {
+                if (_isQuizStarted != value)
+                {
+                    _isQuizStarted = value;
+                    OnPropertyChanged(nameof(IsQuizStarted));
+                    OnPropertyChanged(nameof(ContentVisibility));
+                    OnPropertyChanged(nameof(CanStartQuiz));
+                    OnPropertyChanged(nameof(CanFinishQuiz));
+                }
+            }
+        }
+
+
         public ICommand NextQuestionCommand { get; private set; }
         public ICommand PreviousQuestionCommand { get; private set; }
         public ICommand FinishQuizCommand { get; private set; }
         public ICommand SelectAnswerCommand { get; private set; }
+        public ICommand StartQuizCommand { get; private set; }
+
+        public ICommand ShowResultsCommand { get; private set; }
+
+        private bool _areResultsVisible;
+        public bool AreResultsVisible
+        {
+            get => _areResultsVisible;
+            set
+            {
+                _areResultsVisible = value;
+                OnPropertyChanged(nameof(AreResultsVisible));
+                OnPropertyChanged(nameof(ShowResultsVisibility));
+            }
+        }
+
+        public string ShowResultsVisibility
+        {
+            get => AreResultsVisible ? "Visible" : "Collapsed";
+        }
+
+        private void LoadAndShowResults(object parameter)
+        {
+            try
+            {
+                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "quiz_results.txt");
+                if (!File.Exists(path))
+                {
+                    System.Windows.MessageBox.Show("Brak zapisanych wyników.");
+                    return;
+                }
+
+                QuizResults.Clear();
+                string[] lines = File.ReadAllLines(path);
+                foreach (var line in lines)
+                {
+                    if (!string.IsNullOrWhiteSpace(line))
+                    {
+                        QuizResults.Add(line);
+                    }
+                }
+                AreResultsVisible = true;
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Błąd podczas wczytywania wyników: {ex.Message}");
+            }
+        }
 
         public SolveViewModel()
         {
@@ -100,16 +196,38 @@ namespace Quiz.ViewModel
             if (Quiz.Questions.Any())
             {
                 _currentQuestionIndex = 0;
-                CurrentQuestion = Quiz.Questions[_currentQuestionIndex];
+
             }
 
             IsQuizFinished = false;
+            IsQuizStarted = false;
             QuizScore = string.Empty;
+            TimeLeft = 300;
+            _selectedAnswers = new Dictionary<Question, List<Answer>>();
+            AreResultsVisible = false;
 
+            _timer = new Timer(1000); 
+            _timer.Elapsed += (s, e) => TimeLeft--;
+            _timer.AutoReset = true;
+
+            StartQuizCommand = new RelayCommand(StartQuiz, CanStartQuiz);
             NextQuestionCommand = new RelayCommand(NextQuestion, CanNextQuestion);
             PreviousQuestionCommand = new RelayCommand(PreviousQuestion, CanPreviousQuestion);
             FinishQuizCommand = new RelayCommand(FinishQuiz, CanFinishQuiz);
             SelectAnswerCommand = new RelayCommand(SelectAnswer, CanSelectAnswer);
+            _selectedAnswers = new Dictionary<Question, List<Answer>>();
+            ShowResultsCommand = new RelayCommand(LoadAndShowResults, CanShowResults);
+
+            _timer = new Timer(1000);
+            _timer.Elapsed += (s, e) => TimeLeft--;
+            _timer.AutoReset = true;
+
+           
+        }
+
+        private bool CanShowResults(object parameter)
+        {
+            return IsQuizFinished; // Komenda aktywna tylko po zakończeniu quizu
         }
 
         private void LoadQuizData()
@@ -174,6 +292,19 @@ namespace Quiz.ViewModel
         }
 
 
+        private void StartQuiz(object parameter)
+        {
+            IsQuizStarted = true;
+            CurrentQuestion = Quiz.Questions[_currentQuestionIndex];
+            _timer.Start();
+        }
+
+
+        private bool CanStartQuiz(object parameter)
+        {
+            return !IsQuizStarted && !IsQuizFinished;
+        }
+
         private void NextQuestion(object parameter)
         {
             if (_currentQuestionIndex < Quiz.Questions.Count - 1)
@@ -203,7 +334,7 @@ namespace Quiz.ViewModel
 
         private bool CanPreviousQuestion(object parameter)
         {
-            return !IsQuizFinished && _currentQuestionIndex > 0;
+            return IsQuizStarted && !IsQuizFinished && _currentQuestionIndex > 0;
         }
 
 
@@ -211,36 +342,109 @@ namespace Quiz.ViewModel
         {
             IsQuizFinished = true;
             CurrentQuestion = null;
+            _timer.Stop();
 
             int score = 0;
+            int totalCorrect = 0;
             foreach (var question in Quiz.Questions)
             {
-                if (question.SelectedAnswer != null && question.SelectedAnswer.IsCorrect)
+                int correctForQuestion = 0;
+                int selectedCorrect = 0;
+                var selectedForQuestion = _selectedAnswers[question];
+                foreach (var answer in question.Answers)
                 {
-                    score++;
+                    if (answer.IsCorrect) correctForQuestion++;
+                    if (selectedForQuestion.Contains(answer) && answer.IsCorrect) selectedCorrect++;
+                    if (selectedForQuestion.Contains(answer) && !answer.IsCorrect) selectedCorrect--;
                 }
+                if (selectedCorrect == correctForQuestion && correctForQuestion > 0) score++;
+
+                
+
             }
             QuizScore = $"Twój wynik: {score} na {Quiz.Questions.Count}";
-
+            SaveQuizResults();
+            AreResultsVisible = false;
 
         }
 
         private bool CanFinishQuiz(object parameter)
         {
-            return _currentQuestionIndex >= Quiz.Questions.Count - 1 || IsQuizFinished;
+            return IsQuizStarted && (_currentQuestionIndex >= Quiz.Questions.Count - 1 || IsQuizFinished);
         }
 
         private void SelectAnswer(object parameter)
         {
             if (parameter is Answer selectedAnswer && CurrentQuestion != null)
             {
-                CurrentQuestion.SelectedAnswer = selectedAnswer;
+                if (!_selectedAnswers.ContainsKey(CurrentQuestion))
+                {
+                    _selectedAnswers[CurrentQuestion] = new List<Answer>();
+                }
+
+                var selectedForQuestion = _selectedAnswers[CurrentQuestion];
+                if (selectedForQuestion.Contains(selectedAnswer))
+                {
+                    selectedForQuestion.Remove(selectedAnswer);
+                }
+                else
+                {
+                    selectedForQuestion.Add(selectedAnswer);
+                }
+                // Ręczne powiadomienie UI o zmianie
+                OnPropertyChanged(nameof(CurrentQuestion));
             }
         }
 
         private bool CanSelectAnswer(object parameter)
         {
-            return CurrentQuestion != null && parameter is Answer;
+            return CurrentQuestion != null && IsQuizStarted && !IsQuizFinished;
+        }
+
+        public bool IsAnswerSelected(Answer answer)
+        {
+            return CurrentQuestion != null && _selectedAnswers[CurrentQuestion].Contains(answer);
+        }
+
+        private ObservableCollection<string> _quizResults = new ObservableCollection<string>();
+        public ObservableCollection<string> QuizResults
+        {
+            get => _quizResults;
+            set
+            {
+                _quizResults = value;
+                OnPropertyChanged(nameof(QuizResults));
+            }
+        }
+
+        private void SaveQuizResults()
+        {
+            try
+            {
+                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "quiz_results.txt");
+                using (StreamWriter writer = new StreamWriter(path))
+                {
+                    writer.WriteLine($"Wyniki quizu: {Quiz.Name} - {DateTime.Now}");
+                    writer.WriteLine($"Twój wynik: {QuizScore}");
+                    writer.WriteLine();
+
+                    foreach (var question in Quiz.Questions)
+                    {
+                        var correctAnswers = question.Answers.Where(a => a.IsCorrect).Select(a => a.Text).ToList();
+                        var selectedForQuestion = _selectedAnswers.ContainsKey(question) ? _selectedAnswers[question] : new List<Answer>();
+                        var selectedAnswers = selectedForQuestion.Select(a => a.Text).ToList();
+
+                        writer.WriteLine($"Pytanie: {question.QuestionText}");
+                        writer.WriteLine($"Twoje odpowiedzi: {(selectedAnswers.Any() ? string.Join(", ", selectedAnswers) : "Brak")}");
+                        writer.WriteLine($"Poprawne odpowiedzi: {string.Join(", ", correctAnswers)}");
+                        writer.WriteLine();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Błąd podczas zapisywania wyników: {ex.Message}");
+            }
         }
 
     }
