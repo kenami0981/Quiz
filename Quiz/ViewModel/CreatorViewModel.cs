@@ -1,5 +1,7 @@
-﻿using Quiz.Commands;
+﻿using Microsoft.Win32;
+using Quiz.Commands;
 using Quiz.Model;
+using Quiz.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,6 +15,7 @@ namespace Quiz.ViewModel
 {
     internal class CreatorViewModel : BaseViewModel
     {
+       
         public ObservableCollection<Question> Questions { get; } = new ObservableCollection<Question>();
 
         private Visibility _firstElementVisibility = Visibility.Visible;
@@ -154,15 +157,27 @@ namespace Quiz.ViewModel
                 OnPropertyChanged(nameof(IsAnswer4Correct));
             }
         }
-        //public void AddQuestion()
-        //{
-        //string[] answers = { _answer1, _answer2, _answer3, _answer4 };
-        //bool[] correctAnswers = { _isAnswer1Correct, _isAnswer2Correct, _isAnswer3Correct, _isAnswer4Correct};
-        //    Question pyt= new Question(_questionTitle, _questionText, answers, correctAnswers);
-        //    Console.WriteLine(pyt.ToString());
-        //    // Logika dodawania pytania (możesz tu dodać później np. walidację i zapis)
-        //    Console.WriteLine("Pytanie zostało dodane!");
-        //}
+        public static string FormatQuiz(QuizName quiz)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine(quiz.Name);
+
+            foreach (var question in quiz.Questions)
+            {
+                sb.AppendLine(question.QuestionText);
+
+                foreach (var answer in question.Answers)
+                {
+                    sb.AppendLine($"{answer.Text} {(answer.IsCorrect ? "true" : "false")}");
+                }
+
+                sb.AppendLine(); // Pusta linia między pytaniami
+            }
+            
+            return sb.ToString().Trim();
+        }
+
+
         private QuizName _quizTitle;
         private ICommand _addQuizTitleCommand;
         public ICommand AddQuizTitleCommand {
@@ -186,7 +201,95 @@ namespace Quiz.ViewModel
 
             }
         }
-        
+        private ICommand _decryptCommand;
+        public ICommand DecryptCommand
+        {
+            get
+            {
+                if (_decryptCommand == null)
+                {
+                    _decryptCommand = new RelayCommand(
+                    (object o) =>
+                    {
+                    OpenFileDialog openFileDialog = new OpenFileDialog
+                    {
+                        Filter = "Pliki tekstowe (*.txt)|*.txt|Wszystkie pliki (*.*)|*.*",
+                        Title = "Zapis studentów"
+                    };
+
+                        if (openFileDialog.ShowDialog() == true)
+                        {
+                            var encryptionService = new EncryptionService("tajne_haslo");
+                            string encryptedPath = openFileDialog.FileName;
+                            string decryptedPath = "C:\\Users\\HP\\Downloads\\quiz_decrypted.txt";
+                            encryptionService.Decrypt(encryptedPath, decryptedPath);
+                        }
+                    },
+                    (object o) =>
+                    {
+                        return true;
+                    });
+                }
+                return _decryptCommand;
+
+            }
+        }
+        private ICommand _saveToFileCommand;
+        public ICommand SaveToFileCommand
+        {
+            get
+            {
+                if (_saveToFileCommand == null)
+                {
+                    _saveToFileCommand = new RelayCommand(
+                    (object o) =>
+                    {
+                        //var encryptionService = new EncryptionService("tajny_klucz");
+                        //string quizText = FormatQuiz(_quizTitle); // Używamy FormatQuiz, aby sformatować quiz
+                        //encryptionService.EncryptAndSaveToFile(quizText, "C:\\Users\\HP\\Downloads\\quiz_encrypted123.txt");
+                        SaveFileDialog saveFileDialog = new SaveFileDialog
+                        {
+                            Filter = "Pliki tekstowe (*.txt)|*.txt|Wszystkie pliki (*.*)|*.*",
+                            Title = "Zapisz plik"
+                        };
+
+                        if (saveFileDialog.ShowDialog() == true)
+                        {
+                            // Pobranie kolekcji pracowników
+                            var encryptionService = new EncryptionService("tajne_haslo");
+
+                            string quizText = $"{_quizTitle.Name}\n";
+                            foreach (var question in _quizTitle.Questions)
+                            {
+                                quizText += $"{question.QuestionTitle}\n";
+                                foreach (var answer in question.Answers)
+                                {
+                                    quizText += $"{answer.Text} {(answer.IsCorrect ? "true" : "false")}\n";
+                                }
+                                quizText += "\n";
+                            }
+
+
+                            string encryptedPath = saveFileDialog.FileName;
+                            encryptionService.EncryptAndSaveToFile(quizText, encryptedPath);
+
+
+    
+
+                            MessageBox.Show("Plik zapisany pomyślnie!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+                            
+                        }
+                        
+                    },
+                    (object o) =>
+                    {
+                        return true;
+                    });
+                }
+                return _saveToFileCommand;
+            }
+        }
+
         private ICommand _addQuestionCommand;
         public ICommand AddQuestionCommand
         {
@@ -206,6 +309,7 @@ namespace Quiz.ViewModel
                         Console.WriteLine(question.ToString());
                         _quizTitle.AddQuestion(question);
                         Questions.Add(question);
+                       
 
 
                         OnPropertyChanged(nameof(_addQuestionCommand));
