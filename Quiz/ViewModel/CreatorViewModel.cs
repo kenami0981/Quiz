@@ -261,7 +261,7 @@ namespace Quiz.ViewModel
                             string quizText = $"{_quizTitle.Name}\n";
                             foreach (var question in _quizTitle.Questions)
                             {
-                                quizText += $"{question.QuestionTitle}\n";
+                                quizText += $"{question.QuestionText}\n";
                                 foreach (var answer in question.Answers)
                                 {
                                     quizText += $"{answer.Text} {(answer.IsCorrect ? "true" : "false")}\n";

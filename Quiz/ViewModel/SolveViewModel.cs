@@ -7,6 +7,8 @@ using System.Windows.Input;
 using System.Collections.Generic;
 using System;
 using System.Timers;
+using Microsoft.Win32;
+using Quiz.Services;
 
 
 
@@ -14,6 +16,7 @@ namespace Quiz.ViewModel
 {
     internal class SolveViewModel : BaseViewModel
     {
+        private readonly System.Windows.Threading.Dispatcher _dispatcher = System.Windows.Application.Current.Dispatcher;
         private QuizName _quiz;
         private Question _currentQuestion;
         private int _currentQuestionIndex;
@@ -142,6 +145,7 @@ namespace Quiz.ViewModel
         public ICommand SelectAnswerCommand { get; private set; }
         public ICommand StartQuizCommand { get; private set; }
 
+
         public ICommand ShowResultsCommand { get; private set; }
 
         private bool _areResultsVisible;
@@ -160,11 +164,38 @@ namespace Quiz.ViewModel
         {
             get => AreResultsVisible ? "Visible" : "Collapsed";
         }
+        private void Decrypt()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "Pliki zaszyfrowane (*.txt)|*.txt|Wszystkie pliki (*.*)|*.*",
+                Title = "Wybierz zaszyfrowany plik quizu"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    var encryptionService = new EncryptionService("tajne_haslo");
+                    string encryptedPath = openFileDialog.FileName;
+                    string decryptedPath = Path.Combine(Path.GetTempPath(), "quiz_decrypted.txt");
+
+                    encryptionService.Decrypt(encryptedPath, decryptedPath);
+
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.MessageBox.Show($"Błąd podczas odszyfrowywania pliku: {ex.Message}");
+                }
+            }
+        }
+
 
         private void LoadAndShowResults(object parameter)
         {
             try
             {
+                
                 string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "quiz_results.txt");
                 if (!File.Exists(path))
                 {
@@ -191,12 +222,12 @@ namespace Quiz.ViewModel
 
         public SolveViewModel()
         {
+            
             Quiz = new QuizName("");
-            LoadQuizData();
+            
             if (Quiz.Questions.Any())
             {
                 _currentQuestionIndex = 0;
-
             }
 
             IsQuizFinished = false;
@@ -207,7 +238,10 @@ namespace Quiz.ViewModel
             AreResultsVisible = false;
 
             _timer = new Timer(1000);
-            _timer.Elapsed += (s, e) => TimeLeft--;
+            _timer.Elapsed += (s, e) =>
+            {
+                _dispatcher.Invoke(() => TimeLeft--);
+            };
             _timer.AutoReset = true;
 
             StartQuizCommand = new RelayCommand(StartQuiz, CanStartQuiz);
@@ -215,15 +249,9 @@ namespace Quiz.ViewModel
             PreviousQuestionCommand = new RelayCommand(PreviousQuestion, CanPreviousQuestion);
             FinishQuizCommand = new RelayCommand(FinishQuiz, CanFinishQuiz);
             SelectAnswerCommand = new RelayCommand(SelectAnswer, CanSelectAnswer);
-            _selectedAnswers = new Dictionary<Question, List<Answer>>();
             ShowResultsCommand = new RelayCommand(LoadAndShowResults, CanShowResults);
-
-            _timer = new Timer(1000);
-            _timer.Elapsed += (s, e) => TimeLeft--;
-            _timer.AutoReset = true;
-
-
         }
+
 
         private bool CanShowResults(object parameter)
         {
@@ -234,7 +262,8 @@ namespace Quiz.ViewModel
         {
             try
             {
-                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "quiz.txt");
+                //Decrypt();
+                string path = Path.Combine(Path.GetTempPath(), "quiz_decrypted.txt");
                 if (!File.Exists(path))
                 {
                     System.Windows.MessageBox.Show($"Plik quiz.txt nie został znaleziony w ścieżce: {path}");
@@ -293,7 +322,10 @@ namespace Quiz.ViewModel
 
 
         private void StartQuiz(object parameter)
+
         {
+            Decrypt();
+            LoadQuizData();
             IsQuizStarted = true;
             CurrentQuestion = Quiz.Questions[_currentQuestionIndex];
             _timer.Start();

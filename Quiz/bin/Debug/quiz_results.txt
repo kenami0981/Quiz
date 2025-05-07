@@ -1,15 +1,23 @@
-Wyniki quizu: Nasz Quiz - 06.05.2025 23:25:20
-Twój wynik: Twój wynik: 0 na 3
+Wyniki quizu: Ściernisko - 07.05.2025 13:38:30
+Twój wynik: Twój wynik: 1 na 5
 
-Pytanie: Jaka jest stolica Polski?
-Twoje odpowiedzi: Warszawa, Kraków, Gniezno, Lublin
-Poprawne odpowiedzi: Warszawa
+Pytanie: TU
+Twoje odpowiedzi: TU
+Poprawne odpowiedzi: TU, TU, TU, sahur
 
-Pytanie: Kiedy odbyła się pierwsza inauguracja roku akademickiego Politechniki Śląskiej w Gliwicach
-Twoje odpowiedzi: 1950, 1945, 1947, 1959
-Poprawne odpowiedzi: 1945
+Pytanie: TU
+Twoje odpowiedzi: TU
+Poprawne odpowiedzi: TU, TU, TU, sahur
 
-Pytanie: Jaki jest kolor nieba?
-Twoje odpowiedzi: Biały, Zielony, Czerwony, Niebieski
-Poprawne odpowiedzi: Niebieski
+Pytanie: TU
+Twoje odpowiedzi: sahur
+Poprawne odpowiedzi: TU, TU, TU, sahur
+
+Pytanie: KRINDZ
+Twoje odpowiedzi: NIE, WIEM, CO, DZWON
+Poprawne odpowiedzi: NIE, WIEM, CO, DZWON
+
+Pytanie: koloe
+Twoje odpowiedzi: GEJ
+Poprawne odpowiedzi: koelowow, osoosowldlsl, prorryyayqyay, GEJ
 
