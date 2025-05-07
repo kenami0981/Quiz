@@ -326,6 +326,7 @@ namespace Quiz.ViewModel
         {
             Decrypt();
             LoadQuizData();
+            TimeLeft = 1*Quiz.Questions.Count;
             IsQuizStarted = true;
             CurrentQuestion = Quiz.Questions[_currentQuestionIndex];
             _timer.Start();
@@ -382,7 +383,15 @@ namespace Quiz.ViewModel
             {
                 int correctForQuestion = 0;
                 int selectedCorrect = 0;
-                var selectedForQuestion = _selectedAnswers[question];
+                List<Answer> selectedForQuestion;
+                if (_selectedAnswers.ContainsKey(question))
+                {
+                    selectedForQuestion = _selectedAnswers[question];
+                }
+                else
+                {
+                    selectedForQuestion = new List<Answer>();
+                }
                 foreach (var answer in question.Answers)
                 {
                     if (answer.IsCorrect) correctForQuestion++;
