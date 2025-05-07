@@ -1,23 +1,15 @@
-Wyniki quizu: Ściernisko - 07.05.2025 14:02:38
-Twój wynik: Twój wynik: 0 na 5
+Wyniki quizu: Mój quizik - 07.05.2025 14:03:54
+Twój wynik: Twój wynik: 0 na 3
 
-Pytanie: TU
-Twoje odpowiedzi: Brak
-Poprawne odpowiedzi: TU, TU, TU, sahur
+Pytanie: Oto pierwsze pytanko
+Twoje odpowiedzi: Kocham
+Poprawne odpowiedzi: Tak, Kocham
 
-Pytanie: TU
-Twoje odpowiedzi: Brak
-Poprawne odpowiedzi: TU, TU, TU, sahur
+Pytanie: Oto drugie pytanko
+Twoje odpowiedzi: Kocham
+Poprawne odpowiedzi: Tak, Kocham
 
-Pytanie: TU
-Twoje odpowiedzi: Brak
-Poprawne odpowiedzi: TU, TU, TU, sahur
-
-Pytanie: KRINDZ
-Twoje odpowiedzi: Brak
-Poprawne odpowiedzi: NIE, WIEM, CO, DZWON
-
-Pytanie: koloe
-Twoje odpowiedzi: Brak
-Poprawne odpowiedzi: koelowow, osoosowldlsl, prorryyayqyay, GEJ
+Pytanie: Oto drugie pytanko
+Twoje odpowiedzi: Kocham
+Poprawne odpowiedzi: Nienawidzę
 

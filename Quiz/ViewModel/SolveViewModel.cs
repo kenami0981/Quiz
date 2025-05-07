@@ -326,7 +326,7 @@ namespace Quiz.ViewModel
         {
             Decrypt();
             LoadQuizData();
-            TimeLeft = 1*Quiz.Questions.Count;
+            TimeLeft = 30*Quiz.Questions.Count;
             IsQuizStarted = true;
             CurrentQuestion = Quiz.Questions[_currentQuestionIndex];
             _timer.Start();

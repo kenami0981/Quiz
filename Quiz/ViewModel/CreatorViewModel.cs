@@ -54,27 +54,28 @@ namespace Quiz.ViewModel
         private string _questionTitle;
         public string QuestionTitle
         {
-            get
-            {
-                return _questionTitle;
-            }
+            get => _questionTitle;
             set
             {
-                _questionTitle = value;
-                OnPropertyChanged(nameof(QuestionTitle));
+                if (_questionTitle != value)
+                {
+                    _questionTitle = value;
+                    OnPropertyChanged(nameof(QuestionTitle));
+                }
             }
         }
+
         private string _questionText;
         public string QuestionText
         {
-            get
-            {
-                return _questionText;
-            }
+            get => _questionText;
             set
             {
-                _questionText = value;
-                OnPropertyChanged(nameof(QuestionText));
+                if (_questionText != value)
+                {
+                    _questionText = value;
+                    OnPropertyChanged(nameof(QuestionText));
+                }
             }
         }
         private string _answer1;
@@ -157,6 +158,19 @@ namespace Quiz.ViewModel
                 OnPropertyChanged(nameof(IsAnswer4Correct));
             }
         }
+        public void ClearFields() {
+            Answer1 = "";
+            Answer2 = "";
+            Answer3 = "";
+            Answer4 = "";
+            QuestionTitle = "";
+            QuestionText = "";
+            IsAnswer1Correct = false;
+            IsAnswer2Correct = false;
+            IsAnswer3Correct = false;
+            IsAnswer4Correct = false;
+
+        }
         public static string FormatQuiz(QuizName quiz)
         {
             var sb = new StringBuilder();
@@ -201,39 +215,7 @@ namespace Quiz.ViewModel
 
             }
         }
-        private ICommand _decryptCommand;
-        public ICommand DecryptCommand
-        {
-            get
-            {
-                if (_decryptCommand == null)
-                {
-                    _decryptCommand = new RelayCommand(
-                    (object o) =>
-                    {
-                    OpenFileDialog openFileDialog = new OpenFileDialog
-                    {
-                        Filter = "Pliki tekstowe (*.txt)|*.txt|Wszystkie pliki (*.*)|*.*",
-                        Title = "Zapis studentów"
-                    };
-
-                        if (openFileDialog.ShowDialog() == true)
-                        {
-                            var encryptionService = new EncryptionService("tajne_haslo");
-                            string encryptedPath = openFileDialog.FileName;
-                            string decryptedPath = "C:\\Users\\HP\\Downloads\\quiz_decrypted.txt";
-                            encryptionService.Decrypt(encryptedPath, decryptedPath);
-                        }
-                    },
-                    (object o) =>
-                    {
-                        return true;
-                    });
-                }
-                return _decryptCommand;
-
-            }
-        }
+        
         private ICommand _saveToFileCommand;
         public ICommand SaveToFileCommand
         {
@@ -309,6 +291,7 @@ namespace Quiz.ViewModel
                         Console.WriteLine(question.ToString());
                         _quizTitle.AddQuestion(question);
                         Questions.Add(question);
+                        ClearFields();
                        
 
 
@@ -332,10 +315,82 @@ namespace Quiz.ViewModel
                 }
 
             }
+        private Question _selectedQuestion;
+        public Question SelectedQuestion
+        {
+            get => _selectedQuestion;
+            set
+            {
+                _selectedQuestion = value;
+                if (_selectedQuestion != null)
+                {
+                    QuestionTitle = _selectedQuestion.QuestionTitle;
+                    QuestionText = _selectedQuestion.QuestionText;
 
+                    Answer1 = _selectedQuestion.Answers[0].Text;
+                    Answer2 = _selectedQuestion.Answers[1].Text;
+                    Answer3 = _selectedQuestion.Answers[2].Text;
+                    Answer4 = _selectedQuestion.Answers[3].Text;
 
+                    IsAnswer1Correct = _selectedQuestion.Answers[0].IsCorrect;
+                    IsAnswer2Correct = _selectedQuestion.Answers[1].IsCorrect;
+                    IsAnswer3Correct = _selectedQuestion.Answers[2].IsCorrect;
+                    IsAnswer4Correct = _selectedQuestion.Answers[3].IsCorrect;
 
-
+                    OnPropertyChanged(nameof(SelectedQuestion));
+                }
+            }
         }
+        private ICommand _updateQuestionCommand;
+        public ICommand UpdateQuestionCommand
+        {
+            get
+            {
+                if (_updateQuestionCommand == null)
+                {
+                    _updateQuestionCommand = new RelayCommand(
+                    (object o) =>
+                    {
+                        if (_selectedQuestion != null)
+                        {
+                            // Stwórz nową instancję pytania z edytowanymi danymi
+                            var updatedQuestion = new Question(QuestionTitle, QuestionText, new List<Answer>
+    {
+        new Answer(Answer1, IsAnswer1Correct),
+        new Answer(Answer2, IsAnswer2Correct),
+        new Answer(Answer3, IsAnswer3Correct),
+        new Answer(Answer4, IsAnswer4Correct)
+    });
+
+                            int index = Questions.IndexOf(_selectedQuestion);
+                            if (index >= 0)
+                            {
+                                Questions[index] = updatedQuestion;
+                            }
+
+                            // Zaktualizuj też w _quizTitle
+                            int quizIndex = _quizTitle.Questions.IndexOf(_selectedQuestion);
+                            if (quizIndex >= 0)
+                            {
+                                _quizTitle.Questions[quizIndex] = updatedQuestion;
+                            }
+
+                            SelectedQuestion = updatedQuestion;
+                        }
+
+                    },
+                    (object o) =>
+                    {
+                        return _selectedQuestion != null;
+                    });
+                }
+                return _updateQuestionCommand;
+            }
+        }
+
+
+
+
+    }
     }
 

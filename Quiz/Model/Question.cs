@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Quiz.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Quiz.Model
 {
-    internal class Question
+    internal class Question : BaseViewModel
     {
         public string QuestionTitle { get; set; }
         public string QuestionText { get; set; }

@@ -44,12 +44,12 @@
             <TextBox Text="{Binding Answer4, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <CheckBox IsChecked="{Binding IsAnswer4Correct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
             <Button Content="Dodaj" Command="{Binding AddQuestionCommand}"></Button>
+                <Button Content="Zapisz zmiany" Command="{Binding UpdateQuestionCommand}" />
                 <Button Content="Zapisz do pliku" Command="{Binding SaveToFileCommand}" ></Button>
-                <Button Content="Odszyfruj" Command="{Binding DecryptCommand}" ></Button>
             </StackPanel>
         <!--<TextBlock  Text="{Binding QuestionTitle, Mode=OneWay}"></TextBlock>-->
-        
-            <ListBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Questions}">
+
+            <ListBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Questions}" SelectedItem="{Binding SelectedQuestion, Mode=TwoWay}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Margin="5">
