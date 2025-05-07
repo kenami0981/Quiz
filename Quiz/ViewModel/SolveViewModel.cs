@@ -112,7 +112,14 @@ namespace Quiz.ViewModel
                     OnPropertyChanged(nameof(TimeLeft));
                     if (_timeLeft <= 0 && _isQuizStarted && !IsQuizFinished)
                     {
-                        FinishQuiz(null);
+                        if (_currentQuestionIndex < Quiz.Questions.Count - 1)
+                        {
+                            NextQuestion(null); // Przejdź do następnego pytania
+                        }
+                        else
+                        {
+                            FinishQuiz(null); // Zakończ quiz, jeśli to ostatnie pytanie
+                        }
                     }
                 }
             }
@@ -202,7 +209,7 @@ namespace Quiz.ViewModel
             IsQuizFinished = false;
             IsQuizStarted = false;
             QuizScore = string.Empty;
-            TimeLeft = 300;
+            TimeLeft = 30;
             _selectedAnswers = new Dictionary<Question, List<Answer>>();
             AreResultsVisible = false;
 
@@ -267,6 +274,7 @@ namespace Quiz.ViewModel
                         currentQuestion = new Question();
                         currentQuestion.QuestionText = lines[i].Trim();
                         Quiz.AddQuestion(currentQuestion);
+                        
                     }
                     else
                     {
@@ -294,8 +302,11 @@ namespace Quiz.ViewModel
 
         private void StartQuiz(object parameter)
         {
+            if (Quiz.Questions == null || !Quiz.Questions.Any()) return;
             IsQuizStarted = true;
             CurrentQuestion = Quiz.Questions[_currentQuestionIndex];
+            TimeLeft = 30; // Resetuj czas na 30 sekund
+            AreResultsVisible = false;
             _timer.Start();
         }
 
@@ -307,10 +318,14 @@ namespace Quiz.ViewModel
 
         private void NextQuestion(object parameter)
         {
+            if (Quiz.Questions == null || !Quiz.Questions.Any()) return;
             if (_currentQuestionIndex < Quiz.Questions.Count - 1)
             {
                 _currentQuestionIndex++;
                 CurrentQuestion = Quiz.Questions[_currentQuestionIndex];
+                TimeLeft = 30; 
+                _timer.Stop();
+                _timer.Start();
             }
             else
             {
@@ -325,10 +340,14 @@ namespace Quiz.ViewModel
 
         private void PreviousQuestion(object parameter)
         {
+            if (Quiz.Questions == null || !Quiz.Questions.Any()) return;
             if (_currentQuestionIndex > 0)
             {
                 _currentQuestionIndex--;
                 CurrentQuestion = Quiz.Questions[_currentQuestionIndex];
+                TimeLeft = 30; 
+                _timer.Stop();
+                _timer.Start();
             }
         }
 
@@ -340,32 +359,37 @@ namespace Quiz.ViewModel
 
         private void FinishQuiz(object parameter)
         {
-            IsQuizFinished = true;
-            CurrentQuestion = null;
-            _timer.Stop();
-
-            int score = 0;
-            int totalCorrect = 0;
-            foreach (var question in Quiz.Questions)
+            try
             {
-                int correctForQuestion = 0;
-                int selectedCorrect = 0;
-                var selectedForQuestion = _selectedAnswers[question];
-                foreach (var answer in question.Answers)
+                IsQuizFinished = true;
+                CurrentQuestion = null; 
+                _timer.Stop();
+
+                int score = 0;
+                int totalCorrect = 0;
+                foreach (var question in Quiz.Questions)
                 {
-                    if (answer.IsCorrect) correctForQuestion++;
-                    if (selectedForQuestion.Contains(answer) && answer.IsCorrect) selectedCorrect++;
-                    if (selectedForQuestion.Contains(answer) && !answer.IsCorrect) selectedCorrect--;
+                    int correctForQuestion = 0;
+                    int selectedCorrect = 0;
+                    var selectedForQuestion = _selectedAnswers.ContainsKey(question) ? _selectedAnswers[question] : new List<Answer>();
+                    foreach (var answer in question.Answers)
+                    {
+                        if (answer.IsCorrect) correctForQuestion++;
+                        if (selectedForQuestion.Contains(answer) && answer.IsCorrect) selectedCorrect++;
+                        if (selectedForQuestion.Contains(answer) && !answer.IsCorrect) selectedCorrect--;
+                    }
+                    if (selectedCorrect == correctForQuestion && correctForQuestion > 0) score++;
                 }
-                if (selectedCorrect == correctForQuestion && correctForQuestion > 0) score++;
-
-
-
+                QuizScore = $"Twój wynik: {score} na {Quiz.Questions.Count}";
+                SaveQuizResults();
+                AreResultsVisible = false;
             }
-            QuizScore = $"Twój wynik: {score} na {Quiz.Questions.Count}";
-            SaveQuizResults();
-            AreResultsVisible = false;
-
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Błąd podczas kończenia quizu: {ex.Message}");
+                QuizScore = "Błąd podczas obliczania wyniku.";
+                AreResultsVisible = false;
+            }
         }
 
         private bool CanFinishQuiz(object parameter)
