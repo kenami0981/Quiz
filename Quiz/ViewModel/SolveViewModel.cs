@@ -9,6 +9,7 @@ using System;
 using System.Timers;
 using Microsoft.Win32;
 using Quiz.Services;
+using System.Windows;
 
 
 
@@ -40,7 +41,27 @@ namespace Quiz.ViewModel
                 }
             }
         }
+        private Visibility _firstElementVisibility = Visibility.Collapsed;
+        public Visibility FirstElementVisibility
+        {
+            get => _firstElementVisibility;
+            set
+            {
+                _firstElementVisibility = value;
+                OnPropertyChanged(nameof(FirstElementVisibility));
+            }
+        }
 
+        private Visibility _secondElementVisibility = Visibility.Visible;
+        public Visibility SecondElementVisibility
+        {
+            get => _secondElementVisibility;
+            set
+            {
+                _secondElementVisibility = value;
+                OnPropertyChanged(nameof(SecondElementVisibility));
+            }
+        }
         public Question CurrentQuestion
         {
             get => _currentQuestion;
@@ -299,12 +320,22 @@ namespace Quiz.ViewModel
                     }
                     else
                     {
-                        string[] parts = lines[i].Trim().Split(new[] { ' ' }, 2);
-                        if (parts.Length == 2)
+                        string line = lines[i].Trim();
+                        int lastSpaceIndex = line.LastIndexOf(' ');
+
+                        if (lastSpaceIndex > 0 && lastSpaceIndex < line.Length - 1)
                         {
-                            string answerText = parts[0].Trim();
-                            bool isCorrect = bool.Parse(parts[1].Trim());
-                            currentQuestion.Answers.Add(new Answer(answerText, isCorrect));
+                            string answerText = line.Substring(0, lastSpaceIndex);
+                            string isCorrectStr = line.Substring(lastSpaceIndex + 1);
+
+                            if (bool.TryParse(isCorrectStr, out bool isCorrect))
+                            {
+                                // Sprawdzenie duplikatu
+                                if (!currentQuestion.Answers.Any(a => a.Text == answerText))
+                                {
+                                    currentQuestion.Answers.Add(new Answer(answerText, isCorrect));
+                                }
+                            }
                         }
                     }
                 }
@@ -324,6 +355,15 @@ namespace Quiz.ViewModel
         private void StartQuiz(object parameter)
 
         {
+            _selectedAnswers.Clear();
+            QuizScore = string.Empty;
+            AreResultsVisible = false;
+            IsQuizFinished = false;
+            _currentQuestionIndex = 0;
+
+            FirstElementVisibility = Visibility.Visible;
+
+            //SecondElementVisibility = Visibility.Visible;
             Decrypt();
             LoadQuizData();
             TimeLeft = 30*Quiz.Questions.Count;
@@ -372,7 +412,9 @@ namespace Quiz.ViewModel
 
 
         private void FinishQuiz(object parameter)
+
         {
+            FirstElementVisibility = Visibility.Collapsed;
             IsQuizFinished = true;
             CurrentQuestion = null;
             _timer.Stop();
@@ -444,8 +486,11 @@ namespace Quiz.ViewModel
 
         public bool IsAnswerSelected(Answer answer)
         {
-            return CurrentQuestion != null && _selectedAnswers[CurrentQuestion].Contains(answer);
+            return CurrentQuestion != null
+                && _selectedAnswers.ContainsKey(CurrentQuestion)
+                && _selectedAnswers[CurrentQuestion].Contains(answer);
         }
+
 
         private ObservableCollection<string> _quizResults = new ObservableCollection<string>();
         public ObservableCollection<string> QuizResults

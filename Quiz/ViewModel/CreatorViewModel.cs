@@ -341,6 +341,7 @@ namespace Quiz.ViewModel
                 }
             }
         }
+
         private ICommand _updateQuestionCommand;
         public ICommand UpdateQuestionCommand
         {

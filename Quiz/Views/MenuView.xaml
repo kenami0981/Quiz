@@ -4,8 +4,9 @@
              xmlns:vm="clr-namespace:Quiz.ViewModel">
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button Content="Stwórz quiz" Command="{Binding UpdateViewCommand}" CommandParameter="create"/>
-            <Button Content="Rozwiąż quiz" Command="{Binding UpdateViewCommand}" CommandParameter="solve"/>
+            <TextBlock Text="Co chcesz zrobić?" FontSize="25" Margin="5"></TextBlock>
+            <Button Content="Stwórz quiz" Command="{Binding UpdateViewCommand}" CommandParameter="create" Margin="5" Width="130" FontSize="17"/>
+            <Button Content="Rozwiąż quiz" Command="{Binding UpdateViewCommand}" CommandParameter="solve" Margin="5" Width="130" FontSize="17"/>
         </StackPanel>
     </Grid>
 </UserControl>

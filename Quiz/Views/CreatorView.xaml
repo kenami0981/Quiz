@@ -7,13 +7,13 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     
-    <Grid Background="White">
-        <Grid Visibility="{Binding FirstElementVisibility}">
+    <Grid Background="White" >
+        <Grid Visibility="{Binding FirstElementVisibility}" HorizontalAlignment="Center" VerticalAlignment="Center">
             <StackPanel>
-            <Label Content="Tytuł quizu">
+                <Label Content="Tytuł quizu" FontSize="20" Margin="5" HorizontalContentAlignment="Center">
             </Label>
-            <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                <Button Content="Zatwierdź" Command="{Binding AddQuizTitleCommand}"></Button>
+                <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5" Width="200"></TextBox>
+                <Button Content="Zatwierdź" Command="{Binding AddQuizTitleCommand}" Width="100" Margin="5"/>
             </StackPanel>
         </Grid>
         <Grid Visibility="{Binding SecondElementVisibility}">
@@ -25,6 +25,7 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+            <!--<Button Content="Wróć do menu" Command="{Binding UpdateViewCommand}" CommandParameter="menu"></Button>-->
         <Label Content="Kreator"/>
         <StackPanel Grid.Row="1" Grid.Column="0">
             <Label Content="Nazwa pytania"></Label>
