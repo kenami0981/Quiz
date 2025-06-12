@@ -185,7 +185,7 @@ namespace Quiz.ViewModel
                     sb.AppendLine($"{answer.Text} {(answer.IsCorrect ? "true" : "false")}");
                 }
 
-                sb.AppendLine(); // Pusta linia między pytaniami
+                sb.AppendLine(); 
             }
             
             return sb.ToString().Trim();
@@ -215,7 +215,9 @@ namespace Quiz.ViewModel
 
             }
         }
+
         
+
         private ICommand _saveToFileCommand;
         public ICommand SaveToFileCommand
         {
@@ -237,7 +239,7 @@ namespace Quiz.ViewModel
 
                         if (saveFileDialog.ShowDialog() == true)
                         {
-                            // Pobranie kolekcji pracowników
+                            
                             var encryptionService = new EncryptionService("tajne_haslo");
 
                             string quizText = $"{_quizTitle.Name}\n";
@@ -354,7 +356,6 @@ namespace Quiz.ViewModel
                     {
                         if (_selectedQuestion != null)
                         {
-                            // Stwórz nową instancję pytania z edytowanymi danymi
                             var updatedQuestion = new Question(QuestionTitle, QuestionText, new List<Answer>
     {
         new Answer(Answer1, IsAnswer1Correct),
@@ -369,7 +370,7 @@ namespace Quiz.ViewModel
                                 Questions[index] = updatedQuestion;
                             }
 
-                            // Zaktualizuj też w _quizTitle
+                            
                             int quizIndex = _quizTitle.Questions.IndexOf(_selectedQuestion);
                             if (quizIndex >= 0)
                             {

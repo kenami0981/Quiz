@@ -16,8 +16,11 @@ namespace Quiz.ViewModel
         {
             UpdateViewCommand = new UpdateViewCommand(mainViewModel);
         }
+        public MenuViewModel()
+        {
+            
+        }
 
-        // Konstruktor domyślny dla designera (opcjonalnie)
-        public MenuViewModel() { }
+
     }
 }

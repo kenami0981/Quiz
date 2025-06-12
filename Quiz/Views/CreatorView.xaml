@@ -10,6 +10,8 @@
     <Grid Background="White" >
         <Grid Visibility="{Binding FirstElementVisibility}" HorizontalAlignment="Center" VerticalAlignment="Center">
             <StackPanel>
+                <Button Command="{Binding UpdateViewCommand}" CommandParameter="menu" Content="Menu"></Button>
+
                 <Label Content="Tytuł quizu" FontSize="20" Margin="5" HorizontalContentAlignment="Center">
             </Label>
                 <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5" Width="200"></TextBox>

@@ -15,6 +15,7 @@ namespace Quiz.Commands
         public UpdateViewCommand(MainViewModel viewModel) { 
             this.viewModel = viewModel;
         }
+
         public event EventHandler CanExecuteChanged;
 
         public bool CanExecute(object parameter)
@@ -31,6 +32,11 @@ namespace Quiz.Commands
             {
                 viewModel.SelectedViewModel = new SolveViewModel();
             }
+            else if (parameter.ToString() == "menu")
+            {
+                viewModel.SelectedViewModel = new MenuViewModel();
+            }
+            Console.WriteLine("klik");
         }
     }
 }

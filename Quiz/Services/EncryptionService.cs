@@ -25,13 +25,12 @@ namespace Quiz.Services
         {
             using (var aes = Aes.Create())
             {
-                aes.Key = _key;  // Klucz używany do szyfrowania
-                aes.GenerateIV();  // Generowanie nowego IV
+                aes.Key = _key;
+                aes.GenerateIV();  
                 byte[] iv = aes.IV;
 
                 using (var fsOutput = new FileStream(filePath, FileMode.Create))
                 {
-                    // Zapisujemy IV na początku pliku
                     fsOutput.Write(iv, 0, iv.Length);
 
                     using (var encryptor = aes.CreateEncryptor())
@@ -53,12 +52,12 @@ namespace Quiz.Services
             using (var fsInput = new FileStream(inputFilePath, FileMode.Open))
             {
                 byte[] iv = new byte[16];
-                fsInput.Read(iv, 0, iv.Length);  // Odczytujemy IV z pliku
+                fsInput.Read(iv, 0, iv.Length); 
 
                 using (var aes = Aes.Create())
                 {
-                    aes.Key = _key;  // Klucz musi być taki sam jak przy szyfrowaniu
-                    aes.IV = iv;  // Ustawiamy IV do odszyfrowania
+                    aes.Key = _key;
+                    aes.IV = iv;
                     aes.Padding = PaddingMode.PKCS7;
 
                     using (var decryptor = aes.CreateDecryptor())
@@ -67,7 +66,7 @@ namespace Quiz.Services
                         using (var srDecrypt = new StreamReader(csDecrypt, Encoding.UTF8))
                         {
                             string decryptedText = srDecrypt.ReadToEnd();
-                            File.WriteAllText(outputFilePath, decryptedText, Encoding.UTF8);  // Zapisujemy odszyfrowany tekst do pliku
+                            File.WriteAllText(outputFilePath, decryptedText, Encoding.UTF8);
                         }
                     }
                 }

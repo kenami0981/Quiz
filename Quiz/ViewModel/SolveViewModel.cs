@@ -276,7 +276,8 @@ namespace Quiz.ViewModel
 
         private bool CanShowResults(object parameter)
         {
-            return IsQuizFinished; // Komenda aktywna tylko po zakończeniu quizu
+            return IsQuizFinished; 
+
         }
 
         private void LoadQuizData()
@@ -330,7 +331,6 @@ namespace Quiz.ViewModel
 
                             if (bool.TryParse(isCorrectStr, out bool isCorrect))
                             {
-                                // Sprawdzenie duplikatu
                                 if (!currentQuestion.Answers.Any(a => a.Text == answerText))
                                 {
                                     currentQuestion.Answers.Add(new Answer(answerText, isCorrect));
@@ -420,7 +420,6 @@ namespace Quiz.ViewModel
             _timer.Stop();
 
             int score = 0;
-            int totalCorrect = 0;
             foreach (var question in Quiz.Questions)
             {
                 int correctForQuestion = 0;
@@ -474,7 +473,6 @@ namespace Quiz.ViewModel
                 {
                     selectedForQuestion.Add(selectedAnswer);
                 }
-                // Ręczne powiadomienie UI o zmianie
                 OnPropertyChanged(nameof(CurrentQuestion));
             }
         }

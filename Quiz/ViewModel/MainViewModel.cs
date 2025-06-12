@@ -25,8 +25,7 @@ namespace Quiz.ViewModel
 
         public MainViewModel()
         {
-            // Inicjalizacja domyślnego widoku - MenuViewModel
-            SelectedViewModel = new MenuViewModel(this);  // Przekazywanie MainViewModel
+            SelectedViewModel = new MenuViewModel(this);  
         }
     }
 }
